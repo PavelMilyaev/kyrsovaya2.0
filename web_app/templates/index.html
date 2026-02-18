@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вычисление π методом Монте-Карло</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calculator"></i> Вычисление π методом Монте-Карло</h1>
+            <p class="subtitle">Веб-приложение для визуализации стохастического метода вычисления числа π</p>
+        </header>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="visualization-container">
+                    <h2><i class="fas fa-chart-line"></i> Визуализация</h2>
+                    <div class="canvas-container">
+                        <canvas id="monteCarloCanvas" width="500" height="500"></canvas>
+                    </div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #0066ff;"></span>
+                            <span>Точки внутри круга</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #ff6600;"></span>
+                            <span>Точки вне круга</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="control-panel">
+                    <h2><i class="fas fa-sliders-h"></i> Управление</h2>
+
+                    <div class="form-group">
+                        <label for="pointsCount">
+                            <i class="fas fa-bullseye"></i> Количество точек:
+                        </label>
+                        <div class="input-group">
+                            <input type="range" id="pointsRange" min="100" max="10000" step="1000" value="10000">
+                            <input type="number" id="pointsCount" min="100" max="10000" value="10000">
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="startBtn" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Начать расчет
+                        </button>
+                        <button id="pauseBtn" class="btn btn-secondary" disabled>
+                            <i class="fas fa-pause"></i> Пауза
+                        </button>
+                        <button id="stopBtn" class="btn btn-danger" disabled>
+                            <i class="fas fa-stop"></i> Остановить
+                        </button>
+                        <button id="clearBtn" class="btn btn-warning">
+                            <i class="fas fa-trash"></i> Очистить
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-panel">
+                    <h2><i class="fas fa-chart-bar"></i> Статистика</h2>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Текущее π:</span>
+                            <span id="currentPi" class="stat-value">0.000000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Точное π:</span>
+                            <span id="exactPi" class="stat-value">3.141593</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Погрешность:</span>
+                            <span id="error" class="stat-value">0.000000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Обработано точек:</span>
+                            <span id="pointsProcessed" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Точек в круге:</span>
+                            <span id="pointsInCircle" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Отношение:</span>
+                            <span id="ratio" class="stat-value">0.0000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Время:</span>
+                            <span id="elapsedTime" class="stat-value">0.000 с</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Прогресс:</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-panel">
+                    <h2><i class="fas fa-lightbulb"></i> Теория метода</h2>
+                    <div class="theory-content">
+                        <p><strong>Метод Монте-Карло</strong> для вычисления π основан на вероятностном подходе:</p>
+                        <ol>
+                            <li>Рассматриваем квадрат со стороной 2 и вписанный в него круг радиусом 1</li>
+                            <li>Отношение площадей: S<sub>круга</sub>/S<sub>квадрата</sub> = π/4</li>
+                            <li>Генерируем случайные точки в квадрате</li>
+                            <li>Отношение точек в круге к общему числу точек ≈ π/4</li>
+                            <li>π ≈ 4 × (точки в круге) / (все точки)</li>
+                        </ol>
+                        <p class="formula">π ≈ 4 × <span id="ratioFormula">0</span> / <span id="totalFormula">0</span> = <span id="piFormula">0</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
